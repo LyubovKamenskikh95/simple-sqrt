@@ -15,7 +15,7 @@
       <option>RU</option>
       <option>EN</option>
     </select>
-    <a href="#" target="_blank">{{lang.docs}}</a>
+    <a :href="documentationRef" target="_blank">{{lang.docs}}</a>
   </div>
   <div>
     <label for="complexModeCheckbox">{{lang.complexMode}}: </label>
@@ -33,7 +33,7 @@
     <input type="number" min="0" max="15" value="1" v-model="precisionValue">
   </div>
   <div>
-    {{lang.issue}}<a href="#" target="_blank">GitHub</a>
+    {{lang.issue}}<a href="https://github.com/CapitanLust/simple-sqrt/issues" target="_blank">GitHub</a>
   </div>
 </div>
 <script>
@@ -87,6 +87,15 @@
               docs: 'Документация',
               issue: 'Нашли ошибку? Напишите нам: '
             }
+        }
+      },
+      documentationRef: function () {
+        const baseURI = 'https://github.com/CapitanLust/simple-sqrt/wiki/';
+        switch (this.language) {
+          case "EN":
+            return baseURI + 'Documentation';
+          case "RU":
+            return baseURI + 'Документация';
         }
       }
     }
