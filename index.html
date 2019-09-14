@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SimpleSqrt</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<div id="app" class="wrapper">
+  <div>
+    <select v-model="language">
+      <option disabled value="">{{lang.language}}</option>
+      <option>RU</option>
+      <option>EN</option>
+    </select>
+    <a href="#" target="_blank">{{lang.docs}}</a>
+  </div>
+  <div>
+    <label for="complexModeCheckbox">{{lang.complexMode}}: </label>
+    <input id="complexModeCheckbox" type="checkbox" v-model="complexMode">
+  </div>
+  <div v-if="complexMode">
+    <input type="number" v-model="real" placeholder="real">
+    <input type="number" v-model="imaginary" placeholder="imaginary">
+  </div>
+  <div v-else>
+    <input type="number" v-model="input" :placeholder="lang.placeholder">
+  </div>
+  <div>{{lang.answer}}: {{ output }}</div>
+  <div>
+    <input type="number" min="0" max="15" value="1" v-model="precisionValue">
+  </div>
+  <div>
+    {{lang.issue}}<a href="#" target="_blank">GitHub</a>
+  </div>
+</div>
+<script>
+  let app = new Vue({
+    el: "#app",
+    data: {
+      input: "9",
+      real: '1',
+      imaginary: '-2',
+      complexMode: true,
+      language: "EN",
+      precisionValue: 2,
+    },
+    computed: {
+      precision: function () {
+        if (this.precisionValue < 0) {
+          this.precisionValue = 0;
+        }
+        if (this.precisionValue > 15) {
+          this.precisionValue = 15;
+        }
+
+        return this.precisionValue ? this.precisionValue : 0;
+      },
+      output: function () {
+        if (this.complexMode) {
+          const cn = math.complex(`${this.real}${this.imaginary}i`);
+          return math.format(math.sqrt(cn), {notation: 'fixed', precision: this.precision});
+        }
+
+        return Math.sqrt(this.input).toFixed(this.precision)
+      },
+      lang: function () {
+        switch (this.language) {
+          case 'EN':
+            return {
+              placeholder: this.complexMode ? 'Enter complex number' : 'Enter number ',
+              complexMode: 'Complex mode',
+              language: 'Language',
+              answer: 'Answer',
+              docs: 'Documentation',
+              issue: 'If you have a bug: '
+
+            };
+          case 'RU':
+            return {
+              placeholder: this.complexMode ? 'Введите комлексное число' : 'Введите число',
+              complexMode: 'Комплексные числа',
+              language: 'Язык',
+              answer: 'Ответ',
+              docs: 'Документация',
+              issue: 'Нашли ошибку? Напишите нам: '
+            }
+        }
+      }
+    }
+  })
+</script>
+</body>
+</html>
